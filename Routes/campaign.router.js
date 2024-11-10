@@ -1,5 +1,5 @@
 import express from 'express'
-import { GetCampaign, CreateCampaign } from "../Controllers/campaign.controller.js";
+import { GetCampaign, CreateCampaign, GetCampaignById } from "../Controllers/campaign.controller.js";
 import userMiddleware from '../MiddleWare/user.middleware.js';
 import multer from 'multer';
 
@@ -21,8 +21,7 @@ const router = express.Router();
 router.post('/create', userMiddleware, upload.single("image"), CreateCampaign);
 
 
-
-
 router.get('/campaigns',GetCampaign);
+router.get('/campaign/:id',GetCampaignById);
 
 export default router;

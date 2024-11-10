@@ -16,7 +16,7 @@ const CampaignSchema = new Schema({
         type: String,
         require:true
     },
-    currentAmount:{
+    currentFunding:{
         type: Number,
     },
     fundingGoal:{
