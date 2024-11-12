@@ -10,6 +10,7 @@ function userMiddleware(req,res,next){
    // console.log(jwtToken);
     const decodedValue = jwt.verify(jwtToken,process.env.JWT_SECRET);
    // console.log(decodedValue);
+   console.log("user Middleware work");
     if(decodedValue.user.username){
         req.username = decodedValue.user.username;
         req._id = decodedValue.user.id;

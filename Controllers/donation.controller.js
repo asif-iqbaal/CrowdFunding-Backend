@@ -1,10 +1,11 @@
 import {Donation} from '../Models/Donation.js';
 import { Campaign } from '../Models/Campaign.js';
 
+// DONATE TO A CAMPAIGN BY ID
 export const donateToCampaign = async (req, res) => {
     try {
-      const { campaignId, amount } = req.body;
-      const campaign = await Campaign.findById(campaignId);
+      const { _id, amount } = req.body;
+      const campaign = await Campaign.findById(_id);
   
       if (!campaign) return res.status(404).json({ error: 'Campaign not found' });
 
@@ -17,16 +18,16 @@ export const donateToCampaign = async (req, res) => {
         return res.status(403).json({ error: 'User has already donated to this campaign' });
       }
 
-      if(campaign.currentAmount < campaign.targetAmount && donationAmount < campaign.targetAmount){
-        campaign.currentAmount += donationAmount;
+      if (campaign.currentFunding < campaign.fundingGoal) {
+        campaign.currentFunding += donationAmount;
       }
-
+    
       campaign.donators.push(req._id);
       
       await campaign.save();
   
       const donation = new Donation({
-        campaign: campaignId,
+        campaign: _id,
         User: req._id,
         amount,
       });
@@ -38,6 +39,7 @@ export const donateToCampaign = async (req, res) => {
     }
   };
 
+// GET ALL DONATION
  export const GetDonations = async (req,res) => {
  try {
   const donation = await Donation.find();

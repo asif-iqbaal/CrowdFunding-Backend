@@ -18,6 +18,7 @@ const CampaignSchema = new Schema({
     },
     currentFunding:{
         type: Number,
+        default:0
     },
     fundingGoal:{
         type: Number,

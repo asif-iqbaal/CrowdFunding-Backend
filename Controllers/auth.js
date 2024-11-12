@@ -6,8 +6,8 @@ import jwt from 'jsonwebtoken'
 
 // SIGN UP 
 export const  signup = async(req,res,next) => {
-    const {username,email,password} = req.body;
-    
+    const {username,email,password,confirmPassword} = req.body;
+    if(password === confirmPassword){
     try {
     let user = await User.findOne({email});
     if(user){
@@ -40,6 +40,7 @@ export const  signup = async(req,res,next) => {
     } catch (error) {
         next(error);
     }
+}
 }
 
 // LOGIN 
