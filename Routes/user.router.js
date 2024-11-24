@@ -3,6 +3,7 @@ import { DeleteAccount, login, signup} from '../Controllers/auth.js';
 import passport from "passport";
 import Google from "passport-google-oauth20";
 import {User} from '../Models/User.js'
+import userMiddleware from '../MiddleWare/user.middleware.js';
 
 const router = express.Router();
 const GoogleStrategy = Google.Strategy;
@@ -10,6 +11,21 @@ const GoogleStrategy = Google.Strategy;
 router.post('/signup',signup);
 router.post('/login',login);
 router.post('/deleteuser',DeleteAccount);
+
+router.get('/user',userMiddleware,async(req,res) =>{
+    const username = req.username;
+    console.log(username);
+    try {
+        const response = await User.findOne({username}).select('-password');
+
+        res.status(200).json({
+            response,
+            msg:"user Fetched successfully"
+       } )
+    } catch (error) {
+        res.status(500).json({ error: 'Server error' });
+    }
+})
 
 passport.use(
     new GoogleStrategy({
