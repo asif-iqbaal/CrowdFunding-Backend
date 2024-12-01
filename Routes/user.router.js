@@ -4,6 +4,8 @@ import passport from "passport";
 import Google from "passport-google-oauth20";
 import {User} from '../Models/User.js'
 import userMiddleware from '../MiddleWare/user.middleware.js';
+import { Campaign } from '../Models/Campaign.js';
+import bcrypt from 'bcryptjs'
 
 const router = express.Router();
 const GoogleStrategy = Google.Strategy;
@@ -26,6 +28,53 @@ router.get('/user',userMiddleware,async(req,res) =>{
         res.status(500).json({ error: 'Server error' });
     }
 })
+
+router.get('/userCampaigns',userMiddleware,async(req,res) => {
+    const username = req.username;
+    try {
+        const user = await User.findOne({ username });
+
+        if (!user) {
+            return res.status(404).json({ msg: "User not found" });
+        }
+
+        const userCampaigns = await Campaign.find({
+            _id: {
+                "$in": user.mycampaign
+            }
+        });
+
+        res.json({ userCampaigns });
+    } catch (error) {
+        res.status(500).json({ msg: "Server error" });
+    }
+});
+
+router.post('/updatepassword', userMiddleware, async (req, res) => {
+    const username = req.username; // Assumes username is set by userMiddleware
+    const { newPassword } = req.body; // Get the new password from the request body
+
+    try {
+        // Find the user in the database
+        const user = await User.findOne({ username });
+        if (!user) {
+            return res.status(404).json({ msg: "User not found" });
+        }
+
+        // Hash the new password
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+        // Update the password in the database
+        user.password = hashedPassword;
+        await user.save();
+
+        res.status(200).json({ msg: "Password updated successfully" });
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).json({ msg: "Server error" });
+    }
+});
 
 passport.use(
     new GoogleStrategy({

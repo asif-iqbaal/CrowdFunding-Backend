@@ -89,9 +89,9 @@ export const login = async (req,res,next) => {
 
 // DELETE ACCOUNT
 export const DeleteAccount = async(req,res) => {
-    const {id} = req.params;
-
-    const deleteUser = await User.findByIdAndDelete(id,{},{new:true});
+    const {id} = req.body;
+    console.log(id);
+    const deleteUser = await User.findByIdAndDelete(id);
 
     if(!deleteUser){
         res.status(400).json({
@@ -103,6 +103,7 @@ export const DeleteAccount = async(req,res) => {
         msg:"user removed from our database"
     })
 }
+
 passport.use(
     new GoogleStrategy({
         clientID: process.env.GOOGLE_CLIENT_ID,
