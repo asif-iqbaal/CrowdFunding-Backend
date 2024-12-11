@@ -51,11 +51,10 @@ router.get('/userCampaigns',userMiddleware,async(req,res) => {
 });
 
 router.post('/updatepassword', userMiddleware, async (req, res) => {
-    const username = req.username; // Assumes username is set by userMiddleware
-    const { newPassword } = req.body; // Get the new password from the request body
+    const username = req.username; 
+    const { newPassword } = req.body;
 
     try {
-        // Find the user in the database
         const user = await User.findOne({ username });
         if (!user) {
             return res.status(404).json({ msg: "User not found" });
