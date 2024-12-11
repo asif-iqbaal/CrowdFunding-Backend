@@ -108,7 +108,7 @@ passport.use(
     new GoogleStrategy({
         clientID: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        callbackURL: process.env.GOOGLE_CALLBACK_URL,
+        callbackURL: "http://localhost:3000/auth/google/callback",
     },
     async (accessToken, refreshToken, profile, done) => {
         try {
@@ -148,7 +148,7 @@ export const googleAuthCallback = (req, res, next) => {
             return res.redirect('/login');
         }
 
-        const token = jwt.sign({ user: { id: user._id } }, process.env.JWT_SECRET, { expiresIn: '1h' });
-        res.status(200).json({ token });
+        const token = jwt.sign({ user: { id: user._id,username:user.username } }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        res.redirect(`http://localhost:5173?token=${token}`);
     })(req, res, next);
 };

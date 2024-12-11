@@ -23,7 +23,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(cookieParser());
 // Parse incoming request bodies
-app.use(express.json({ limit: '10mb' })); // Set your preferred limit
+app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ limit: '10mb', extended: true }));
 
 // Session configuration
