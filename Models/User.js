@@ -4,18 +4,22 @@ const UserSchema = new Schema(
     {
         username:{
             type:String,
-            unique:true,
             required:true
         },
         email:{
             type:String,
-            required: true
+            unique:true
         },
         password:{
             type:String,
             minlength: [8, 'Password must be at least 8 characters long'],
         },
         googleId: {
+            type: String,
+            unique: true,
+            sparse: true 
+        },
+        githubId: {
             type: String,
             unique: true,
             sparse: true 

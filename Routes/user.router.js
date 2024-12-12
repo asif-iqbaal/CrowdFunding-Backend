@@ -1,5 +1,5 @@
 import express from 'express';
-import { DeleteAccount, googleAuth, googleAuthCallback, login, signup} from '../Controllers/auth.js';
+import { DeleteAccount, githubAuth, githubAuthCallback, googleAuth, googleAuthCallback, login, signup} from '../Controllers/auth.js';
 import passport from "passport";
 import Google from "passport-google-oauth20";
 import {User} from '../Models/User.js'
@@ -15,6 +15,8 @@ router.post('/login',login);
 router.post('/deleteuser',DeleteAccount);
 router.get('/auth/google',googleAuth);
 router.get('/auth/google/callback',googleAuthCallback);
+router.get('/auth/github',githubAuth);
+router.get('/auth/github/callback',githubAuthCallback);
 router.get('/user',userMiddleware,async(req,res) =>{
     const username = req.username;
     console.log(username);

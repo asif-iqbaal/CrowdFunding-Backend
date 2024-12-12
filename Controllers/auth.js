@@ -1,5 +1,6 @@
 import passport from 'passport'
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20'
+import {Strategy as GithubStrategy} from 'passport-github2';
 import {User} from '../Models/User.js'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
@@ -145,10 +146,48 @@ export const googleAuth = passport.authenticate('google', { scope: ['profile', '
 export const googleAuthCallback = (req, res, next) => {
     passport.authenticate('google', { failureRedirect: '/login' }, (err, user) => {
         if (err || !user) {
-            return res.redirect('/login');
+            return res.redirect(`http://localhost:5173`);
         }
 
         const token = jwt.sign({ user: { id: user._id,username:user.username } }, process.env.JWT_SECRET, { expiresIn: '1h' });
         res.redirect(`http://localhost:5173?token=${token}`);
     })(req, res, next);
 };
+
+//_______________________________GITHUB AUTHENTICATION ________________________
+passport.use(new GithubStrategy({
+    clientID: process.env.GITHUB_CLIENT_ID,
+    clientSecret: process.env.GITHUB_CLIENT_SECRET,
+    callbackURL: "http://localhost:3000/auth/github/callback"
+},
+async (accessToken, refreshToken, profile, done) => {
+    try {
+        let user = await User.findOne({ githubId: profile.id });
+        if (!user) {
+            user = new User({
+                username: profile.displayName,
+                githubId: profile.id,
+            });
+            await user.save();
+        }
+
+        console.log((user));
+        done(null, user);
+    } catch (error) {
+        done(error);
+    }
+}
+));
+
+export const githubAuth =  passport.authenticate('github', { scope: [ 'user'  ] });
+
+export const githubAuthCallback = (req, res, next) => {
+        passport.authenticate('github', { failureRedirect: '/login' }, (err, user) => {
+            if (err || !user) {
+                return res.redirect(`http://localhost:5173`);
+            }
+    
+            const token = jwt.sign({ user: { id: user._id,username:user.username } }, process.env.JWT_SECRET, { expiresIn: '1h' });
+            res.redirect(`http://localhost:5173?token=${token}`);
+        })(req, res, next);
+    };
