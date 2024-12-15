@@ -13,8 +13,6 @@ cloudinary.config({
 });
 // CREATE CAMPAIGN
 export const CreateCampaign = async (req, res) => {
-  console.log("Request body:", req.body);
-  console.log("Request file:", req.file);
 
   const { title, category, description, fundingGoal, duration } = req.body;
   const creator = req.username;
@@ -68,7 +66,6 @@ export const CreateCampaign = async (req, res) => {
 
     res.status(200).json({ campaign, message: "Campaign created successfully" });
   } catch (error) {
-    console.error("Error creating campaign:", error);
     res.status(500).json({ error: error.message });
   }
 };

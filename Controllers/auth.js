@@ -91,7 +91,6 @@ export const login = async (req,res,next) => {
 // DELETE ACCOUNT
 export const DeleteAccount = async(req,res) => {
     const {id} = req.body;
-    console.log(id);
     const deleteUser = await User.findByIdAndDelete(id);
 
     if(!deleteUser){
@@ -109,7 +108,7 @@ passport.use(
     new GoogleStrategy({
         clientID: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        callbackURL: "http://localhost:3000/auth/google/callback",
+        callbackURL:process.env.GOOGLE_CALLBACK_URL,
     },
     async (accessToken, refreshToken, profile, done) => {
         try {
@@ -123,7 +122,6 @@ passport.use(
                 await user.save();
             }
 
-            console.log((user));
             done(null, user);
         } catch (error) {
             done(error);
@@ -146,11 +144,11 @@ export const googleAuth = passport.authenticate('google', { scope: ['profile', '
 export const googleAuthCallback = (req, res, next) => {
     passport.authenticate('google', { failureRedirect: '/login' }, (err, user) => {
         if (err || !user) {
-            return res.redirect(`http://localhost:5173`);
+            return res.redirect(process.env.FRONTEND_URL);
         }
 
         const token = jwt.sign({ user: { id: user._id,username:user.username } }, process.env.JWT_SECRET, { expiresIn: '1h' });
-        res.redirect(`http://localhost:5173?token=${token}`);
+        res.redirect(`${process.env.FRONTEND_URL}?token=${token}`);
     })(req, res, next);
 };
 
@@ -158,7 +156,7 @@ export const googleAuthCallback = (req, res, next) => {
 passport.use(new GithubStrategy({
     clientID: process.env.GITHUB_CLIENT_ID,
     clientSecret: process.env.GITHUB_CLIENT_SECRET,
-    callbackURL: "http://localhost:3000/auth/github/callback"
+    callbackURL: process.env.GITHUB_CALLBACK_URL
 },
 async (accessToken, refreshToken, profile, done) => {
     try {
@@ -171,7 +169,6 @@ async (accessToken, refreshToken, profile, done) => {
             await user.save();
         }
 
-        console.log((user));
         done(null, user);
     } catch (error) {
         done(error);
@@ -184,10 +181,10 @@ export const githubAuth =  passport.authenticate('github', { scope: [ 'user'  ] 
 export const githubAuthCallback = (req, res, next) => {
         passport.authenticate('github', { failureRedirect: '/login' }, (err, user) => {
             if (err || !user) {
-                return res.redirect(`http://localhost:5173`);
+                return res.redirect(process.env.FRONTEND_URL);
             }
     
             const token = jwt.sign({ user: { id: user._id,username:user.username } }, process.env.JWT_SECRET, { expiresIn: '1h' });
-            res.redirect(`http://localhost:5173?token=${token}`);
+            res.redirect(`${process.env.FRONTEND_URL}?token=${token}`);
         })(req, res, next);
     };

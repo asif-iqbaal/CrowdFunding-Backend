@@ -17,6 +17,9 @@ const DonationSchema = new Schema({
     date:{
         type:Date,
         default: Date.now()
+    },
+    razorpayOrderId:{
+        type:String
     }
 });
 
