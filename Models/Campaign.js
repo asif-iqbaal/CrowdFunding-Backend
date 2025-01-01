@@ -31,6 +31,10 @@ const CampaignSchema = new Schema({
     image:{
         type:String,
     },
+    phone:{
+        type:Number,
+        required:true
+    },
     donators:[{
         type:mongoose.Schema.Types.ObjectId,
         ref:'User'

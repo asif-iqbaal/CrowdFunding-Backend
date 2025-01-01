@@ -14,7 +14,7 @@ cloudinary.config({
 // CREATE CAMPAIGN
 export const CreateCampaign = async (req, res) => {
 
-  const { title, category, description, fundingGoal, duration } = req.body;
+  const { title, category, description, fundingGoal, duration , phone } = req.body;
   const creator = req.username;
 
   // Check if the creator (username) is available
@@ -49,6 +49,7 @@ export const CreateCampaign = async (req, res) => {
       creator,
       fundingGoal,
       duration,
+      phone,
       image: imageUrl,  
     });
 
