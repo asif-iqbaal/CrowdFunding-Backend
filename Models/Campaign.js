@@ -35,6 +35,16 @@ const CampaignSchema = new Schema({
         type:mongoose.Schema.Types.ObjectId,
         ref:'User'
     }],
+    approved:{
+        type:Boolean,
+        required:true,
+        default:false
+    },
+    status: {
+     type: String,
+     enum: ['active', 'inactive', 'pending'],
+     default: 'pending' 
+    },
     createdAt:{
         type:Date,
         default:Date.now()

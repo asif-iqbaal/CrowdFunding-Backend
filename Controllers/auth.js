@@ -31,7 +31,8 @@ export const  signup = async(req,res,next) => {
    const payload = {
         user :{
             username:user.username,
-            id: user._id
+            id: user._id,
+            role:user.role
         }
    }
    const token = jwt.sign(payload,process.env.JWT_SECRET,{expiresIn:'1h'});
@@ -63,7 +64,8 @@ export const login = async (req,res,next) => {
         const payload ={
             user:{
                 username:user.username,
-                id:user._id
+                id:user._id,
+                role:user.role
             }
         }
 

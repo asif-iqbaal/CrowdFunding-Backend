@@ -106,3 +106,44 @@ export const GetCampaignById = async (req,res) => {
     }
 }
 
+export const ApprovedCampaign = async (req,res) => {
+  const {id} = req.params;
+  try {
+    if(!id) return res.json({msg:"No Data Found"})
+      const camp = await Campaign.findByIdAndUpdate(
+        id,
+        { approved: true, status: 'active' },
+        { new: true } 
+      );
+
+  if(!camp) return res.json({msg:"Data is not updated"});
+  res.status(201).json({
+    msg:"Campaign was approved by ADMIN"
+  });
+  } catch (error) {
+    res.status(500).json({
+      error:`server error ${error}`
+    })
+  }
+}
+
+export const RejectCampaign = async (req,res) => {
+  const {id} = req.params;
+  try {
+    if(!id) return res.json({msg:"No Data Found"})
+      const camp = await Campaign.findByIdAndUpdate(
+        id,
+        { approved: false, status: 'inactive' },
+        { new: true } 
+      );
+
+  if(!camp) return res.json({msg:"Data is not updated"});
+  res.status(201).json({
+    msg:"Campaign was approved by ADMIN"
+  });
+  } catch (error) {
+    res.status(500).json({
+      error:`server error ${error}`
+    })
+  }
+}
