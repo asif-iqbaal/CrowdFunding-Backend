@@ -4,7 +4,15 @@ import {Strategy as GithubStrategy} from 'passport-github2';
 import {User} from '../Models/User.js'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
+import nodemailer from 'nodemailer';
 
+const transporter = nodemailer.createTransport({
+    service: 'Gmail', 
+    auth: {
+      user: process.env.EMAIL_ADDRESS, 
+      pass: process.env.EMAIL_PASSWORD, 
+    },
+  });
 // SIGN UP 
 export const  signup = async(req,res,next) => {
     const {username,email,password,confirmPassword} = req.body;
@@ -190,3 +198,31 @@ export const githubAuthCallback = (req, res, next) => {
             res.redirect(`${process.env.FRONTEND_URL}?token=${token}`);
         })(req, res, next);
     };
+
+
+//_______________________________ EMAIL VERIFICATION BY CREDENTIAL LOGIN  ________________________
+
+const sendVerificationEmail = (toEmail,verificationLink) => {
+    const mailOptions = {
+        from: process.env.EMAIL_ADDRESS,
+        to: toEmail, 
+        subject: 'Email Verification',
+        html: `
+          <h1>Verify Your Email</h1>
+          <p>Click the link below to verify your email address:</p>
+          <a href="${verificationLink}" target="_blank">Verify Email</a>
+        `,
+      };
+    
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.error('Error sending email:', error);
+        } else {
+          console.log('Email sent:', info.response);
+        }
+      });
+}
+
+export const sendVerifyEmail = (req,res) =>{
+
+}
