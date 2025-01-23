@@ -30,6 +30,12 @@ const UserSchema = new Schema(
             unique: true,
             sparse: true 
         },
+        isVerify:{
+            type:Boolean,
+            default:false,
+            required:true
+        }
+        ,
         mycampaign:[{
             type:mongoose.Schema.Types.ObjectId,
             ref:"Campaign"
@@ -40,4 +46,11 @@ const UserSchema = new Schema(
     }
 );
 
+UserSchema.pre('save', function (next) {
+    if (this.googleId || this.githubId) {
+      this.isVerify = true;
+    }
+    next();
+  });
+  
 export const User = mongoose.model("User",UserSchema);

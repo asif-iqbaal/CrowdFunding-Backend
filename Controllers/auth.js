@@ -224,5 +224,27 @@ const sendVerificationEmail = (toEmail,verificationLink) => {
 }
 
 export const sendVerifyEmail = (req,res) =>{
+    const { email } = req.body;
 
+    const token = jwt.sign({ email }, process.env.JWT_SECRET, { expiresIn: '1h' });
+  
+    const verificationLink = `${process.env.FRONTEND_URL}/verify?token=${token}`;
+  
+    sendVerificationEmail(email, verificationLink);
+  
+    res.send('Verification email sent!');
+}
+
+export const verifyMail = (req,res) => {
+    const { token } = req.query;
+
+    try {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      console.log('Verified email:', decoded.email);
+  
+      res.send({success:true});
+    } catch (error) {
+      console.error('Invalid or expired token:', error);
+      res.status(400).send({success:false});
+    }
 }
