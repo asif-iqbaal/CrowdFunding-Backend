@@ -19,9 +19,9 @@ export const donateToCampaign = async (req, res) => {
       if (isNaN(donationAmount) || donationAmount <= 0) {
         return res.status(400).json({ error: 'Invalid donation amount' });
       }
-      if (campaign.donators && campaign.donators.includes(req._id)) {
-        return res.status(403).json({ error: 'User has already donated to this campaign' });
-      }
+      // if (campaign.donators && campaign.donators.includes(req._id)) {
+      //   return res.status(403).json({ error: 'User has already donated to this campaign' });
+      // }
       const order = await razorpayInstance.orders.create({
         amount: donationAmount * 100, 
         currency: 'INR',
