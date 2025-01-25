@@ -13,7 +13,7 @@ const transporter = nodemailer.createTransport({
       pass: process.env.EMAIL_PASSWORD, 
     },
   });
-// SIGN UP 
+// ____________________________________SIGN UP _______________________________________________________________
 export const  signup = async(req,res,next) => {
     const {username,email,password,confirmPassword} = req.body;
     if(password === confirmPassword){
@@ -53,7 +53,7 @@ export const  signup = async(req,res,next) => {
 }
 }
 
-// LOGIN 
+//_____________________________________________ LOGIN ______________________________________________________________
 export const login = async (req,res,next) => {
     const {email,password} = req.body;
     try {
@@ -98,7 +98,7 @@ export const login = async (req,res,next) => {
     }
 }
 
-// DELETE ACCOUNT
+// _______________________________________________DELETE ACCOUNT_______________________________________________
 export const DeleteAccount = async(req,res) => {
     const {id} = req.body;
     const deleteUser = await User.findByIdAndDelete(id);
@@ -147,7 +147,7 @@ passport.deserializeUser((id, done) => {
     User.findById(id, (err, user) => done(err, user));
 });
 
-// Google Authentication Middleware
+// ____________________________________Google Authentication Middleware__________________________________________
 export const googleAuth = passport.authenticate('google', { scope: ['profile', 'email'] });
 
 // Google Authentication Callback Middleware

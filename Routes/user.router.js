@@ -1,6 +1,5 @@
 import express from 'express';
 import { DeleteAccount, githubAuth, githubAuthCallback, googleAuth, googleAuthCallback, login, sendVerifyEmail, signup, verifyMail} from '../Controllers/auth.js';
-import passport from "passport";
 import Google from "passport-google-oauth20";
 import {User} from '../Models/User.js'
 import userMiddleware from '../MiddleWare/user.middleware.js';

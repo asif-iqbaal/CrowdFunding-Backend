@@ -7,7 +7,7 @@ const razorpayInstance = new Razorpay({
   key_id: process.env.RAZORPAY_API_KEY,
   key_secret: process.env.RAZORPAY_API_SECRET,
 });
-// DONATE TO A CAMPAIGN BY ID
+// _________________________DONATE TO A CAMPAIGN BY ID_______________________________
 export const donateToCampaign = async (req, res) => {
     try {
       const { _id, amount } = req.body;
@@ -57,7 +57,7 @@ export const donateToCampaign = async (req, res) => {
       res.status(500).json({ error: error.message || 'Server error' });
     }
   };
-// verify razor  pay token 
+// ______________________verify razor  pay token _____________________________________
 export const verification = async function(req,res){
   const { orderId, paymentId, signature } = req.body;
   try {
@@ -76,7 +76,7 @@ export const verification = async function(req,res){
     res.status(500).json({ success: false, message: 'Server error during payment verification' });
   }
 }
-// GET ALL DONATION
+// ________________________GET ALL DONATION_____________________________
  export const GetDonations = async (req,res) => {
  try {
   const donation = await Donation.find();

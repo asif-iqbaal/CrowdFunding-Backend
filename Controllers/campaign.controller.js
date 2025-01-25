@@ -3,15 +3,12 @@ import { User } from "../Models/User.js";
 import cloudinary from 'cloudinary';
 import multer from 'multer';
 
-// const storage = multer.memoryStorage();
-// const upload = multer({ storage: storage });
-
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
   api_key: process.env.API_KEY,
   api_secret: process.env.API_SECRET,
 });
-// CREATE CAMPAIGN
+// ____________________________CREATE CAMPAIGN________________________
 export const CreateCampaign = async (req, res) => {
 
   const { title, category, description, fundingGoal, duration , phone } = req.body;
@@ -72,7 +69,7 @@ export const CreateCampaign = async (req, res) => {
 };
 
 
-// GET ALL CAMPAIGNS
+// __________________________________GET ALL CAMPAIGNS______________________________
 export const GetCampaign = async (req,res) => {
     try {
         const campaign = await Campaign.find();
@@ -86,7 +83,7 @@ export const GetCampaign = async (req,res) => {
     }
 }
 
-// GET CAMPAIGN BY ID
+// _____________________________________GET CAMPAIGN BY ID________________________________
 export const GetCampaignById = async (req,res) => {
     try {
         const {id} = req.params;
@@ -107,6 +104,7 @@ export const GetCampaignById = async (req,res) => {
     }
 }
 
+//_______________________APPROVED CAMPAIGN______________________________________
 export const ApprovedCampaign = async (req,res) => {
   const {id} = req.params;
   try {
@@ -127,7 +125,7 @@ export const ApprovedCampaign = async (req,res) => {
     })
   }
 }
-
+// ____________________________REJECT CAMPAIGN _____________________________
 export const RejectCampaign = async (req,res) => {
   const {id} = req.params;
   try {
